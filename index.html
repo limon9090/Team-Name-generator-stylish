@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>স্টাইলিশ নাম জেনারেটর</title>
+    <title>GenZ নাম জেনারেটর</title>
     <!-- Google Fonts for better UI -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <!-- Font Awesome for Real Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     <style>
         :root {
             --bg-gradient-start: #1e1e2f;
@@ -22,6 +22,18 @@
             --accent-color: #6a5af9;
             --accent-glow: rgba(106, 90, 249, 0.25);
             --success-color: #28a745;
+            --shadow-color: rgba(0, 0, 0, 0.5);
+        }
+
+        body.light-mode {
+            --bg-gradient-start: #f0f2f5;
+            --bg-gradient-end: #e8eaf6;
+            --card-color: #ffffff;
+            --input-bg-color: #f0f2f5;
+            --border-color: #d0d5e0;
+            --text-color: #1c1e21;
+            --text-secondary-color: #555c66;
+            --shadow-color: rgba(0, 0, 0, 0.1);
         }
 
         * {
@@ -40,6 +52,31 @@
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            transition: background 0.4s ease, color 0.4s ease;
+        }
+        
+        .theme-toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 45px;
+            height: 45px;
+            background-color: var(--card-color);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.2em;
+            color: var(--text-secondary-color);
+            box-shadow: 0 4px 10px var(--shadow-color);
+            z-index: 1000;
+            transition: all 0.3s ease;
+        }
+        .theme-toggle-btn:hover {
+            color: var(--accent-color);
+            transform: translateY(-2px) scale(1.1);
         }
 
         .container {
@@ -49,8 +86,8 @@
             padding: 40px 30px;
             background: var(--card-color);
             border-radius: 25px;
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
+            box-shadow: 0 15px 50px var(--shadow-color);
+            transition: all 0.4s ease;
         }
 
         header {
@@ -181,18 +218,9 @@
             padding-right: 10px;
         }
 
-        /* Custom Scrollbar */
-        .results-container::-webkit-scrollbar {
-            width: 6px;
-        }
-        .results-container::-webkit-scrollbar-track {
-            background: var(--input-bg-color);
-            border-radius: 10px;
-        }
-        .results-container::-webkit-scrollbar-thumb {
-            background: var(--accent-color);
-            border-radius: 10px;
-        }
+        .results-container::-webkit-scrollbar { width: 6px; }
+        .results-container::-webkit-scrollbar-track { background: var(--input-bg-color); border-radius: 10px; }
+        .results-container::-webkit-scrollbar-thumb { background: var(--accent-color); border-radius: 10px; }
         
         .result-card {
             background: var(--input-bg-color);
@@ -215,29 +243,23 @@
         .result-card:hover {
             transform: scale(1.03);
             border-left-color: var(--accent-color);
-            box-shadow: 0 0 25px var(--accent-glow);
+            box-shadow: 0 5px 25px var(--accent-glow);
         }
 
         .text-content {
             flex-grow: 1;
             margin-right: 15px;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
         .styled-name {
             font-size: 1.5em;
             word-break: break-all;
-            margin-bottom: 5px;
             font-weight: 500;
         }
         
-        .gp-id {
-            font-family: 'Courier New', monospace;
-            font-size: 1.1em;
-            color: var(--success-color);
-            font-weight: bold;
-        }
-
         .copy-btn {
             width: 50px;
             height: 50px;
@@ -254,32 +276,21 @@
             align-items: center;
         }
 
-        .copy-btn:hover {
-            transform: scale(1.1) rotate(10deg);
-        }
+        .copy-btn:hover { transform: scale(1.1) rotate(10deg); }
+        .copy-btn.copied { background-color: var(--success-color); transform: scale(1.1) rotate(0deg); }
 
-        .copy-btn.copied {
-            background-color: var(--success-color);
-            transform: scale(1.1) rotate(0deg);
-        }
-
-        /* Mobile Responsive */
         @media (max-width: 500px) {
-            body {
-                padding: 0;
-                align-items: flex-start;
-            }
-            .container {
-                width: 100%;
-                max-width: 100%;
-                min-height: 100vh;
-                border-radius: 0;
-                padding: 40px 20px;
-            }
+            body { padding: 0; align-items: flex-start; }
+            .container { width: 100%; max-width: 100%; min-height: 100vh; border-radius: 0; padding: 40px 20px; }
+            .theme-toggle-btn { top: 15px; right: 15px; }
         }
     </style>
 </head>
 <body>
+
+    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Toggle Theme">
+        <i class="fa-solid fa-moon"></i>
+    </button>
 
     <div class="container">
         <header>
@@ -298,14 +309,6 @@
                     <input type="text" id="full-name" class="input-field" placeholder="যেমন: Limon Hasan">
                 </div>
             </div>
-
-            <div class="input-group">
-                <label for="gp-id-input">Genz Power আইডি</label>
-                <div class="input-wrapper">
-                    <i class="fa-solid fa-hashtag"></i>
-                    <input type="text" id="gp-id-input" class="input-field" placeholder="যেমন: 085864" pattern="[0-9]*">
-                </div>
-            </div>
             
             <div class="input-group">
                 <label for="team-name-input">টিম লিখুন বা বেছে নিন</label>
@@ -317,6 +320,8 @@
                     </datalist>
                 </div>
             </div>
+            
+            <!-- GP কোড ইনপুট বক্স মুছে ফেলা হয়েছে -->
             
             <button id="generate-btn">জেনারেট করুন</button>
         </div>
@@ -340,11 +345,9 @@
             { map: { a: '𝐚', b: '𝐛', c: '𝐜', d: '𝐝', e: '𝐞', f: '𝐟', g: '𝐠', h: '𝐡', i: '𝐢', j: '𝐣', k: '𝐤', l: '𝐥', m: '𝐦', n: '𝐧', o: '𝐨', p: '𝐩', q: '𝐪', r: '𝐫', s: '𝐬', t: '𝐭', u: '𝐮', v: '𝐯', w: '𝐰', x: '𝐱', y: '𝐲', z: '𝐳', A: '𝐀', B: '𝐁', C: '𝐂', D: '𝐃', E: '𝐄', F: '𝐅', G: '𝐆', H: '𝐇', I: '𝐈', J: '𝐉', K: '𝐊', L: '𝐋', M: '𝐌', N: '𝐍', O: '𝐎', P: '𝐏', Q: '𝐐', R: '𝐑', S: '𝐒', T: '𝐓', U: '𝐔', V: '𝐕', W: '𝐖', X: '𝐗', Y: '𝐘', Z: '𝐙' } }
         ];
 
-        const teamNames = ["AL-JANNAT", "AL-RAYHAN", "AL-FALAH", "AL-FORKAN",
-  , "DENGER TEAM", , "AL-MADINA", "GenZ Official", , "AL-AQSA", , "AL-JAMIYA","AL-NOOR"];
+        const teamNames = ["AL-JANNAT", "AL-RAYHAN", "AL-FALAH", "AL-FORKAN", "DENGER TEAM", "AL-MADINA", "GenZ Official", "AL-AQSA", "AL-JAMIYA", "AL-NOOR"];
         
         const fullNameInput = document.getElementById('full-name');
-        const gpIdInput = document.getElementById('gp-id-input');
         const teamNameInput = document.getElementById('team-name-input');
         const teamDatalist = document.getElementById('team-names-list');
         const generateBtn = document.getElementById('generate-btn');
@@ -352,12 +355,15 @@
         const controlsArea = document.getElementById('controls-area');
         const toUpperBtn = document.getElementById('to-upper-btn');
         const toLowerBtn = document.getElementById('to-lower-btn');
+        const themeToggleBtn = document.getElementById('theme-toggle');
 
         function populateTeams() {
             teamNames.forEach(team => {
-                const option = document.createElement('option');
-                option.value = team;
-                teamDatalist.appendChild(option);
+                if(team && team.trim() !== '') {
+                    const option = document.createElement('option');
+                    option.value = team;
+                    teamDatalist.appendChild(option);
+                }
             });
         }
 
@@ -365,13 +371,10 @@
             return text.split('').map(char => map[char] || char).join('');
         }
 
-        // --- নতুন নির্ভরযোগ্য কপি ফাংশন ---
         function copyTextToClipboard(text) {
-            // আধুনিক ব্রাউজারের জন্য navigator.clipboard চেষ্টা করুন (HTTPS সাইটে কাজ করে)
             if (navigator.clipboard && window.isSecureContext) {
                 return navigator.clipboard.writeText(text);
             } else {
-                // ফলব্যাক মেথড (লোকাল ফাইল ও HTTP সাইটের জন্য)
                 let textArea = document.createElement("textarea");
                 textArea.value = text;
                 textArea.style.position = "fixed"; 
@@ -389,16 +392,14 @@
 
         function generateNameAndId() {
             const fullName = fullNameInput.value.trim();
-            const gpId = gpIdInput.value.trim();
             const selectedTeam = teamNameInput.value.trim();
 
-            if (!fullName || !gpId || !selectedTeam) {
-                alert('অনুগ্রহ করে সব তথ্য পূরণ করুন।');
+            if (!fullName || !selectedTeam) {
+                alert('অনুগ্রহ করে নাম এবং টিম পূরণ করুন।');
                 return;
             }
 
-            // --- টিমের নামের জন্য উন্নত অ্যাব্রিভিয়েশন লজিক ---
-            const teamWords = selectedTeam.split(/[\s-]+/); // স্পেস বা হাইফেন দিয়ে ভাগ করবে
+            const teamWords = selectedTeam.split(/[\s-]+/); 
             let teamAbbreviation;
             if (teamWords.length > 1) {
                 teamAbbreviation = (teamWords[0][0] + teamWords[1][0]).toUpperCase();
@@ -409,10 +410,9 @@
             }
             
             const baseName = `${teamAbbreviation} ☪︎™ ${fullName}`;
-            const finalGpId = `GP: ${gpId}`;
-
+            
             resultsContainer.innerHTML = '';
-            controlsArea.style.display = 'flex'; // Show controls
+            controlsArea.style.display = 'flex'; 
 
             fonts.forEach(font => {
                 const styledName = convertText(baseName, font.map);
@@ -423,15 +423,14 @@
                 card.innerHTML = `
                     <div class="text-content">
                         <div class="styled-name" data-original-name="${baseName}">${styledName}</div>
-                        <div class="gp-id">${finalGpId}</div>
                     </div>
                     <button class="copy-btn"><i class="fa-regular fa-copy"></i></button>
                 `;
 
                 const copyBtn = card.querySelector('.copy-btn');
-                copyBtn.addEventListener('click', () => {
-                    const currentName = card.querySelector('.styled-name').textContent;
-                    const textToCopy = `${currentName}\n${finalGpId}`;
+                copyBtn.addEventListener('click', (e) => {
+                    e.stopPropagation(); 
+                    const textToCopy = card.querySelector('.styled-name').textContent;
                     
                     copyTextToClipboard(textToCopy).then(() => {
                         copyBtn.innerHTML = '<i class="fa-solid fa-check"></i>';
@@ -450,27 +449,43 @@
         }
         
         function changeCase(targetCase) {
-            const allStyledNames = document.querySelectorAll('.styled-name');
-            allStyledNames.forEach((nameDiv, index) => {
+            document.querySelectorAll('.styled-name').forEach((nameDiv, index) => {
                 const originalName = nameDiv.dataset.originalName;
                 const currentFontMap = fonts[index].map;
-
-                let nameOnly;
-                if(targetCase === 'upper'){
-                    nameOnly = originalName.toUpperCase();
-                } else {
-                    nameOnly = originalName.toLowerCase();
-                }
-
+                let nameOnly = (targetCase === 'upper') ? originalName.toUpperCase() : originalName.toLowerCase();
                 nameDiv.textContent = convertText(nameOnly, currentFontMap);
             });
         }
+        
+        function applyTheme(theme) {
+            const icon = themeToggleBtn.querySelector('i');
+            if (theme === 'light') {
+                document.body.classList.add('light-mode');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            } else {
+                document.body.classList.remove('light-mode');
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            }
+        }
+
+        themeToggleBtn.addEventListener('click', () => {
+            const currentTheme = document.body.classList.contains('light-mode') ? 'light' : 'dark';
+            const newTheme = (currentTheme === 'light') ? 'dark' : 'light';
+            localStorage.setItem('theme', newTheme);
+            applyTheme(newTheme);
+        });
 
         toUpperBtn.addEventListener('click', () => changeCase('upper'));
         toLowerBtn.addEventListener('click', () => changeCase('lower'));
         generateBtn.addEventListener('click', generateNameAndId);
 
-        window.onload = populateTeams;
+        window.onload = () => {
+            populateTeams();
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            applyTheme(savedTheme);
+        };
 
     </script>
 </body>
